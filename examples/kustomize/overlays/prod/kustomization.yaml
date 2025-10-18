@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: myapp-prod
+
+namePrefix: prod-
+
+resources:
+- ../../base
+
+replicas:
+- name: nginx
+  count: 3
+
+configMapGenerator:
+- name: nginx-config
+  behavior: replace
+  literals:
+  - environment=production
+  - log_level=warn
+
+patches:
+- patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/limits/memory
+      value: "256Mi"
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/limits/cpu
+      value: "500m"
+  target:
+    kind: Deployment
+    name: nginx

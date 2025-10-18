@@ -1,0 +1,145 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: demo-webapp-dev
+
+resources:
+- ../../base
+
+nameSuffix: -dev
+
+patches:
+# Patch WebApp Custom Resource
+- target:
+    kind: WebApp
+    name: demo-webapp
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 1
+    - op: replace
+      path: /spec/message
+      value: "Development Environment - Testing in Progress"
+
+# Patch Deployment for dev (1 replica, debug enabled)
+- target:
+    kind: Deployment
+    name: demo-webapp
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 1
+
+# Patch Service to use LoadBalancer
+- target:
+    kind: Service
+    name: demo-webapp
+  patch: |-
+    - op: replace
+      path: /spec/type
+      value: LoadBalancer
+
+# Patch ConfigMap to show dev environment
+- target:
+    kind: ConfigMap
+    name: webapp-html
+  patch: |-
+    - op: replace
+      path: /data/index.html
+      value: |
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>GitOps Lite Demo - DEV</title>
+            <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body {
+                    font-family: 'Courier New', monospace;
+                    background: #1a1a1a;
+                    color: #ddd;
+                    padding: 40px;
+                    line-height: 1.6;
+                }
+                .container {
+                    max-width: 700px;
+                    margin: 0 auto;
+                }
+                h1 {
+                    font-size: 24px;
+                    color: #fff;
+                    margin-bottom: 10px;
+                    font-weight: normal;
+                }
+                .env-badge {
+                    display: inline-block;
+                    padding: 4px 12px;
+                    background: #554400;
+                    color: #ffcc00;
+                    font-size: 11px;
+                    border-radius: 3px;
+                    margin-bottom: 30px;
+                }
+                .section {
+                    background: #242424;
+                    border-left: 3px solid #ffcc00;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                }
+                .section-title {
+                    color: #aaa;
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    margin-bottom: 15px;
+                    letter-spacing: 1px;
+                }
+                .info-line {
+                    margin: 8px 0;
+                    font-size: 14px;
+                }
+                .label {
+                    color: #888;
+                    display: inline-block;
+                    width: 140px;
+                }
+                .value {
+                    color: #fff;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>GitOps Lite Demo</h1>
+                <div class="env-badge">DEVELOPMENT</div>
+
+                <div class="section">
+                    <div class="section-title">Custom Resource Definition</div>
+                    <div class="info-line"><span class="label">CRD Name:</span> <span class="value">webapps.demo.gitops-lite.io</span></div>
+                    <div class="info-line"><span class="label">API Version:</span> <span class="value">demo.gitops-lite.io/v1</span></div>
+                    <div class="info-line"><span class="label">Kind:</span> <span class="value">WebApp</span></div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Custom Resource Instance</div>
+                    <div class="info-line"><span class="label">Name:</span> <span class="value">demo-webapp-dev</span></div>
+                    <div class="info-line"><span class="label">Namespace:</span> <span class="value">demo-webapp-dev</span></div>
+                    <div class="info-line"><span class="label">Managed By:</span> <span class="value">gitops-lite</span></div>
+                    <div class="info-line"><span class="label">Stack:</span> <span class="value">demo-webapp-dev</span></div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Deployment Spec</div>
+                    <div class="info-line"><span class="label">Replicas:</span> <span class="value">1</span></div>
+                    <div class="info-line"><span class="label">Image:</span> <span class="value">nginx:1.27-alpine</span></div>
+                    <div class="info-line"><span class="label">Port:</span> <span class="value">80</span></div>
+                    <div class="info-line"><span class="label">Message:</span> <span class="value">Development Environment - Testing in Progress</span></div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Kustomize</div>
+                    <div class="info-line"><span class="label">Renderer:</span> <span class="value">Kustomize v5.7.1</span></div>
+                    <div class="info-line"><span class="label">Overlay:</span> <span class="value">overlays/dev</span></div>
+                    <div class="info-line"><span class="label">Patches:</span> <span class="value">replicas, message, resources</span></div>
+                </div>
+            </div>
+        </body>
+        </html>

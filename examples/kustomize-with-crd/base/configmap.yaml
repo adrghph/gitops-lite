@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-html
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>GitOps Lite Demo</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+                font-family: 'Courier New', monospace;
+                background: #1a1a1a;
+                color: #ddd;
+                padding: 40px;
+                line-height: 1.6;
+            }
+            .container {
+                max-width: 700px;
+                margin: 0 auto;
+            }
+            h1 {
+                font-size: 24px;
+                color: #fff;
+                margin-bottom: 30px;
+                font-weight: normal;
+            }
+            .section {
+                background: #242424;
+                border-left: 3px solid #666;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            .section-title {
+                color: #aaa;
+                font-size: 12px;
+                text-transform: uppercase;
+                margin-bottom: 15px;
+                letter-spacing: 1px;
+            }
+            .info-line {
+                margin: 8px 0;
+                font-size: 14px;
+            }
+            .label {
+                color: #888;
+                display: inline-block;
+                width: 140px;
+            }
+            .value {
+                color: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>GitOps Lite Demo</h1>
+
+            <div class="section">
+                <div class="section-title">Custom Resource Definition</div>
+                <div class="info-line"><span class="label">CRD Name:</span> <span class="value">webapps.demo.gitops-lite.io</span></div>
+                <div class="info-line"><span class="label">API Version:</span> <span class="value">demo.gitops-lite.io/v1</span></div>
+                <div class="info-line"><span class="label">Kind:</span> <span class="value">WebApp</span></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Custom Resource Instance</div>
+                <div class="info-line"><span class="label">Name:</span> <span class="value">demo-webapp</span></div>
+                <div class="info-line"><span class="label">Namespace:</span> <span class="value">demo-webapp</span></div>
+                <div class="info-line"><span class="label">Managed By:</span> <span class="value">gitops-lite</span></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Deployment Spec</div>
+                <div class="info-line"><span class="label">Replicas:</span> <span class="value">2</span></div>
+                <div class="info-line"><span class="label">Image:</span> <span class="value">nginx:1.27-alpine</span></div>
+                <div class="info-line"><span class="label">Port:</span> <span class="value">80</span></div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Kustomize</div>
+                <div class="info-line"><span class="label">Renderer:</span> <span class="value">Kustomize v5.7.1</span></div>
+                <div class="info-line"><span class="label">Environment:</span> <span class="value">base</span></div>
+            </div>
+        </div>
+    </body>
+    </html>

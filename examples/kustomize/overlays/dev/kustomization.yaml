@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: myapp-dev
+
+namePrefix: dev-
+
+resources:
+- ../../base
+
+replicas:
+- name: nginx
+  count: 1
+
+configMapGenerator:
+- name: nginx-config
+  behavior: replace
+  literals:
+  - environment=development
+  - log_level=debug
+
+patches:
+- patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/limits/memory
+      value: "64Mi"
+  target:
+    kind: Deployment
+    name: nginx

@@ -1,0 +1,43 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: webapps.demo.gitops-lite.io
+spec:
+  group: demo.gitops-lite.io
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            required:
+            - replicas
+            - image
+            properties:
+              replicas:
+                type: integer
+                description: Number of replicas for the web application
+                minimum: 1
+                maximum: 10
+              image:
+                type: string
+                description: Docker image for the web application
+              port:
+                type: integer
+                description: Container port to expose
+                default: 80
+              message:
+                type: string
+                description: Custom message to display on the web page
+                default: "Hello from gitops-lite!"
+  scope: Namespaced
+  names:
+    plural: webapps
+    singular: webapp
+    kind: WebApp
+    shortNames:
+    - wa

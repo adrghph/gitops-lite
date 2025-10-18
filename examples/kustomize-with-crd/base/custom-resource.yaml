@@ -1,0 +1,9 @@
+apiVersion: demo.gitops-lite.io/v1
+kind: WebApp
+metadata:
+  name: demo-webapp
+spec:
+  replicas: 2
+  image: nginx:1.27-alpine
+  port: 80
+  message: "Hello from gitops-lite!"

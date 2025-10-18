@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- namespace.yaml
+
+helmCharts:
+# Istio base - installs CRDs
+- name: base
+  repo: https://istio-release.storage.googleapis.com/charts
+  version: 1.27.2
+  releaseName: istio-base
+  namespace: istio-system
+  includeCRDs: false  # gitops-lite handles CRDs automatically
+  valuesFile: values-base.yaml
+
+# Istio control plane (istiod)
+- name: istiod
+  repo: https://istio-release.storage.googleapis.com/charts
+  version: 1.27.2
+  releaseName: istiod
+  namespace: istio-system
+  includeCRDs: false
+  valuesFile: values-istiod.yaml

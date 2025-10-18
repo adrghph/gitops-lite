@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: dev
+  annotations:
+    gitops-lite.io/order: "40"
+spec:
+  selector:
+    app: nginx
+  ports:
+  - port: 8080
+    targetPort: 80
+  type: ClusterIP
